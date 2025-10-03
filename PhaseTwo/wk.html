@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnHub - E-Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-card.completed::before {
+            content: '✓ Completed';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .course-card h3 {
+            color: #333;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .course-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .lesson-count {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .duration {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .course-detail {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-header {
+            margin-bottom: 30px;
+        }
+
+        .course-header h2 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .course-info {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+        }
+
+        .lessons-section {
+            margin-top: 30px;
+        }
+
+        .lessons-section h3 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .lesson-item {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-item:hover {
+            background: #f3f4f6;
+            transform: translateX(5px);
+        }
+
+        .lesson-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .lesson-info p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .course-detail {
+                padding: 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header id="mainHeader">
+            <h1>🎓 LearnHub</h1>
+            <p>Expand your knowledge with our curated courses</p>
+        </header>
+
+        <!-- Home Page -->
+        <div id="homePage">
+            <div class="courses-grid" id="coursesGrid"></div>
+        </div>
+
+        <!-- Course Detail Page -->
+        <div id="detailPage" class="hidden">
+            <a href="#" class="back-btn" onclick="showHomePage(); return false;">← Back to Courses</a>
+            <div class="course-detail">
+                <div class="course-header">
+                    <h2 id="detailTitle"></h2>
+                    <div class="course-info">
+                        <span id="detailLessons"></span>
+                        <span id="detailDuration"></span>
+                    </div>
+                    <p id="detailDescription"></p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText" style="color: #667eea; font-weight: bold;"></p>
+                </div>
+
+                <div class="lessons-section">
+                    <h3>Course Lessons</h3>
+                    <div id="lessonsList"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-success" id="completeBtn" onclick="toggleCourseCompletion()">
+                        Mark as Completed
+                    </button>
+                    <button class="btn btn-secondary" onclick="showHomePage()">
+                        Return to Courses
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Course data
+        const coursesData = [
+            {
+                id: 1,
+                title: "Web Development Fundamentals",
+                description: "Learn the basics of HTML, CSS, and JavaScript to build modern websites from scratch.",
+                icon: "💻",
+                lessons: [
+                    { title: "Introduction to HTML", duration: "25 min" },
+                    { title: "Styling with CSS", duration: "30 min" },
+                    { title: "JavaScript Basics", duration: "40 min" },
+                    { title: "Building Your First Website", duration: "45 min" }
+                ],
+                duration: "2h 20min",
+                completed: false
+            },
+            {
+                id: 2,
+                title: "Python Programming",
+                description: "Master Python programming from basics to advanced concepts including data structures and OOP.",
+                icon: "🐍",
+                lessons: [
+                    { title: "Python Syntax and Variables", duration: "30 min" },
+                    { title: "Control Flow and Loops", duration: "35 min" },
+                    { title: "Functions and Modules", duration: "40 min" },
+                    { title: "Object-Oriented Programming", duration: "50 min" }
+                ],
+                duration: "2h 35min",
+                completed: false
+            },
+            {
+                id: 3,
+                title: "Digital Marketing Basics",
+                description: "Understand SEO, social media marketing, and content strategy to grow your online presence.",
+                icon: "📱",
+                lessons: [
+                    { title: "Introduction to Digital Marketing", duration: "20 min" },
+                    { title: "SEO Fundamentals", duration: "35 min" },
+                    { title: "Social Media Strategy", duration: "30 min" },
+                    { title: "Content Marketing", duration: "25 min" }
+                ],
+                duration: "1h 50min",
+                completed: false
+            },
+            {
+                id: 4,
+                title: "Graphic Design Essentials",
+                description: "Learn design principles, color theory, and typography to create stunning visual content.",
+                icon: "🎨",
+                lessons: [
+                    { title: "Design Principles", duration: "30 min" },
+                    { title: "Color Theory", duration: "25 min" },
+                    { title: "Typography Basics", duration: "30 min" },
+                    { title: "Creating Your First Design", duration: "40 min" }
+                ],
+                duration: "2h 5min",
+                completed: false
+            },
+            {
+                id: 5,
+                title: "Data Science Introduction",
+                description: "Dive into data analysis, visualization, and machine learning fundamentals with Python.",
+                icon: "📊",
+                lessons: [
+                    { title: "Data Analysis with Pandas", duration: "45 min" },
+                    { title: "Data Visualization", duration: "35 min" },
+                    { title: "Introduction to Machine Learning", duration: "50 min" },
+                    { title: "Building Predictive Models", duration: "60 min" }
+                ],
+                duration: "3h 10min",
+                completed: false
+            },
+            {
+                id: 6,
+                title: "Business Management 101",
+                description: "Essential business skills including leadership, project management, and strategic planning.",
+                icon: "💼",
+                lessons: [
+                    { title: "Leadership Fundamentals", duration: "30 min" },
+                    { title: "Project Management Basics", duration: "35 min" },
+                    { title: "Strategic Planning", duration: "40 min" },
+                    { title: "Team Management", duration: "30 min" }
+                ],
+                duration: "2h 15min",
+                completed: false
+            }
+        ];
+
+        let currentCourseId = null;
+
+        // Initialize the app
+        function init() {
+            renderCourses();
+        }
+
+        // Render all courses on home page
+        function renderCourses() {
+            const grid = document.getElementById('coursesGrid');
+            grid.innerHTML = '';
+
+            coursesData.forEach(course => {
+                const card = document.createElement('div');
+                card.className = `course-card ${course.completed ? 'completed' : ''}`;
+                card.onclick = () => showCourseDetail(course.id);
+                
+                card.innerHTML = `
+                    <div class="course-icon">${course.icon}</div>
+                    <h3>${course.title}</h3>
+                    <p>${course.description}</p>
+                    <div class="course-meta">
+                        <span class="lesson-count">${course.lessons.length} Lessons</span>
+                        <span class="duration">${course.duration}</span>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Show course detail page
+        function showCourseDetail(courseId) {
+            currentCourseId = courseId;
+            const course = coursesData.find(c => c.id === courseId);
+            
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('detailPage').classList.remove('hidden');
+            
+            document.getElementById('detailTitle').textContent = course.title;
+            document.getElementById('detailDescription').textContent = course.description;
+            document.getElementById('detailLessons').textContent = `📚 ${course.lessons.length} Lessons`;
+            document.getElementById('detailDuration').textContent = `⏱️ ${course.duration}`;
+            
+            // Update progress
+            updateProgress(course);
+            
+            // Render lessons
+            const lessonsList = document.getElementById('lessonsList');
+            lessonsList.innerHTML = '';
+            course.lessons.forEach((lesson, index) => {
+                const lessonItem = document.createElement('div');
+                lessonItem.className = 'lesson-item';
+                lessonItem.innerHTML = `
+                    <div class="lesson-info">
+                        <h4>Lesson ${index + 1}: ${lesson.title}</h4>
+                        <p>${lesson.duration}</p>
+                    </div>
+                    <span style="font-size: 24px;">${course.completed ? '✅' : '📖'}</span>
+                `;
+                lessonsList.appendChild(lessonItem);
+            });
+            
+            // Update button
+            const completeBtn = document.getElementById('completeBtn');
+            if (course.completed) {
+                completeBtn.textContent = '✓ Completed';
+                completeBtn.className = 'btn btn-success';
+            } else {
+                completeBtn.textContent = 'Mark as Completed';
+                completeBtn.className = 'btn btn-primary';
+            }
+        }
+
+        // Update progress display
+        function updateProgress(course) {
+            const progress = course.completed ? 100 : 0;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = 
+                course.completed ? 'Course Completed! 🎉' : 'Progress: 0%';
+        }
+
+        // Toggle course completion
+        function toggleCourseCompletion() {
+            const course = coursesData.find(c => c.id === currentCourseId);
+            course.completed = !course.completed;
+            
+            showCourseDetail(currentCourseId);
+            
+            // Show feedback
+            const btn = document.getElementById('completeBtn');
+            if (course.completed) {
+                btn.textContent = '✓ Completed';
+                alert('🎉 Congratulations! You\'ve completed this course!');
+            } else {
+                btn.textContent = 'Mark as Completed';
+            }
+        }
+
+        // Show home page
+        function showHomePage() {
+            document.getElementById('detailPage').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+            renderCourses();
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
