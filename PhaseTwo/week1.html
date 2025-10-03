@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini E-Learning Platform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #4CAF50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    .course-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .course-card {
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fafafa;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      margin-top: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #45a049;
+    }
+    .back-btn {
+      background: #555;
+    }
+    .back-btn:hover {
+      background: #333;
+    }
+    .lesson {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    .lesson input[type="checkbox"] {
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+    .completed {
+      color: green;
+      font-weight: bold;
+    }
+    progress {
+      width: 100%;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mini E-Learning Platform</h1>
+  </header>
+  <div class="container" id="app"></div>
+
+  <script>
+    // Course data with lesson-level completion
+    const courses = [
+      {
+        id: 1,
+        title: "HTML Basics",
+        description: "Learn the building blocks of the web.",
+        lessons: [
+          { title: "Introduction to HTML", completed: false },
+          { title: "Tags and Attributes", completed: false },
+          { title: "Forms and Inputs", completed: false }
+        ],
+        completed: false
+      },
+      {
+        id: 2,
+        title: "CSS Fundamentals",
+        description: "Style your web pages with CSS.",
+        lessons: [
+          { title: "Selectors", completed: false },
+          { title: "Box Model", completed: false },
+          { title: "Flexbox Basics", completed: false }
+        ],
+        completed: false
+      },
+      {
+        id: 3,
+        title: "JavaScript Essentials",
+        description: "Make your website interactive.",
+        lessons: [
+          { title: "Variables & Data Types", completed: false },
+          { title: "Functions", completed: false },
+          { title: "DOM Manipulation", completed: false }
+        ],
+        completed: false
+      }
+    ];
+
+    const app = document.getElementById('app');
+
+    // Render home page
+    function renderHome() {
+      app.innerHTML = `
+        <h2>Available Courses</h2>
+        <div class="course-list">
+          ${courses.map(course => `
+            <div class="course-card" onclick="renderCourse(${course.id})">
+              <h3>${course.title}</h3>
+              <p>${course.description}</p>
+              <p>Status: ${course.completed ? '<span class="completed">Completed</span>' : 'In Progress'}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Render course detail page
+    function renderCourse(id) {
+      const course = courses.find(c => c.id === id);
+      const completedLessons = course.lessons.filter(l => l.completed).length;
+      const progress = (completedLessons / course.lessons.length) * 100;
+
+      app.innerHTML = `
+        <button class="btn back-btn" onclick="renderHome()">← Back</button>
+        <h2>${course.title}</h2>
+        <p>${course.description}</p>
+        <h3>Lessons</h3>
+        <div>
+          ${course.lessons.map((lesson, index) => `
+            <div class="lesson">
+              <span>${lesson.title}</span>
+              <input type="checkbox" ${lesson.completed ? "checked" : ""} 
+                onclick="toggleLesson(${course.id}, ${index})">
+            </div>
+          `).join('')}
+        </div>
+        <h3>Progress</h3>
+        <progress value="${progress}" max="100"></progress>
+        <p>${completedLessons} / ${course.lessons.length} lessons completed</p>
+        <button class="btn" onclick="markCourseCompleted(${course.id})">
+          ${course.completed ? "Completed ✅" : "Mark Course as Completed"}
+        </button>
+      `;
+    }
+
+    // Toggle lesson completion
+    function toggleLesson(courseId, lessonIndex) {
+      const course = courses.find(c => c.id === courseId);
+      course.lessons[lessonIndex].completed = !course.lessons[lessonIndex].completed;
+
+      // Auto-mark course as completed if all lessons done
+      course.completed = course.lessons.every(l => l.completed);
+
+      renderCourse(courseId);
+    }
+
+    // Manually mark course as completed
+    function markCourseCompleted(id) {
+      const course = courses.find(c => c.id === id);
+      course.lessons.forEach(l => l.completed = true);
+      course.completed = true;
+      renderCourse(id);
+    }
+
+    // Start app
+    renderHome();
+  </script>
+</body>
+</html>
