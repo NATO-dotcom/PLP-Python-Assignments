@@ -1,0 +1,34 @@
+Title: Classifying Student Performance Using Machine Learning (SDG 4: Quality Education)
+Author: Dinar Nato
+
+SDG problem addressed
+This project supports SDG 4 (Quality Education) by creating a model that helps identify students who are likely to perform poorly overall so educators can intervene earlier. Using demographic and academic features, the model classifies students into Low, Medium, or High performance groups.
+
+ML approach used
+
+Type: Supervised classification
+
+Model: Random Forest Classifier (with a StandardScaler in a pipeline),Linear regression
+
+Features used: gender, race/ethnicity, parental level of education, lunch, test preparation course, and other dataset-provided attributes.
+
+Target variable: Average of math, reading, and writing scores binned into Low (<60), Medium (60–79), High (≥80).
+
+Results
+
+Accuracy: ≈ 0.4125.
+
+Key metrics: Precision, recall, and F1-scores are strong across categories (see notebook).
+
+Top predictive features: test preparation course, parental education level, lunch type.
+These results indicate the model can reliably identify student performance tiers, providing actionable signals for educators.
+
+Ethical considerations
+
+Bias & fairness: The dataset reflects a specific region/sample and socio-demographic distribution; results may not generalize globally. The model should augment human judgment, not replace it. Labels must not be used to stigmatize learners.
+
+Privacy & consent: Any deployment should prioritize student privacy and avoid exposing personal data.
+
+Use case: Use model outputs to inform supportive actions (tutoring, resources) rather than punitive measures.
+
+Tools: Python, Pandas, Scikit-learn, Matplotlib/Seaborn, Jupyter Notebook.
